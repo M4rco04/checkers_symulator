@@ -27,10 +27,16 @@ class Algorithm(ABC):
         pass
 
     def is_terminal(self, color: PawnColor, board: Board) -> bool:
+        if board.moves_without_capture >= 40:
+            return True
+
         moves = self.problem.possible_moves(color, board)
         return len(moves) == 0
 
     def utility(self, board: Board, move_number: int) -> float:
+        if board.moves_without_capture >= 40:
+            return 0.0
+
         return self.heuristic.evaluate(board, self.color, move_number)
 
     def order_moves(

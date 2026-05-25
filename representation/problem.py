@@ -199,6 +199,11 @@ class Problem:
         start = move.start
         to = move.to
 
+        if isinstance(move, Capture):
+            self.board.moves_without_capture = 0
+        else:
+            self.board.moves_without_capture += 1
+
         pawn_to_move = target_board[start]
 
         if pawn_to_move is None:

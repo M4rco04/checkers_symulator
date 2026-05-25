@@ -6,6 +6,7 @@ from view.boardDrawer import BoardDrawer, Option
 from algorithm.minmax import MinMax
 from algorithm.negamax_alpha_beta import NegamaxAlphaBeta
 from algorithm.iterative_deepening import IterativeDeepening
+from algorithm.monte_carlo_search_tree import MonteCarloSearchTree
 
 
 if __name__ == "__main__":
@@ -14,5 +15,6 @@ if __name__ == "__main__":
     algorithm1 = MinMax(p, player_color, 3, 5)
     algorithm2 = NegamaxAlphaBeta(p, player_color.opposite(), 3, 5)
     algorithm3 = IterativeDeepening(p, player_color, 3, 10)
-    drawer = BoardDrawer(Option.AIvAI, algorithm1=algorithm3, algorithm2=algorithm2)
+    algorithm4 = MonteCarloSearchTree(p, player_color.opposite(), 3, 100000)
+    drawer = BoardDrawer(Option.AIvAI, algorithm1=algorithm3, algorithm2=algorithm4)
     drawer.draw()

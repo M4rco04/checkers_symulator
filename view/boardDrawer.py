@@ -272,7 +272,15 @@ class BoardDrawer:
             current_turn = self.problem.current_turn
             possible_moves = self.problem.possible_moves(current_turn)
 
-            if len(possible_moves) == 0:
+            if board_to_draw.moves_without_capture >= 40:
+                self.ax.set_title(
+                    f"REMIS!",
+                    fontsize=16,
+                    fontweight="bold",
+                    color="blue",
+                    loc="center"
+                )
+            elif len(possible_moves) == 0:
                 zwyciezca = "Białe" if current_turn == PawnColor.Black else "Czarne"
                 self.ax.set_title(
                     f"KONIEC GRY! Wygrały: {zwyciezca}",
