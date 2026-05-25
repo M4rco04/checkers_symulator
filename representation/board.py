@@ -10,8 +10,10 @@ class Board:
 
     white_pawns: Dict[Tuple[int, int], Pawn]
     black_pawns: Dict[Tuple[int, int], Pawn]
+    moves_without_capture: int
 
     def __init__(self, pawn_rows: int):
+        self.moves_without_capture = 0
         self.white_pawns = dict()
         self.black_pawns = dict()
         self.board = np.full((8, 8), None, dtype=object)
@@ -64,4 +66,5 @@ class Board:
             new_board.board[pos] = new_pawn
             new_board.black_pawns[pos] = new_pawn
 
+        new_board.moves_without_capture = self.moves_without_capture
         return new_board

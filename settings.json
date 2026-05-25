@@ -1,0 +1,34 @@
+{
+  "rows": 3,
+  "PvP": {
+    "player_color": 1
+  },
+  "PvAI": {
+    "player_color": 1,
+    "algorithm": "MCTS"
+  },
+  "AIvAI": {
+    "algorithm1": "MinMax",
+    "algorithm2": "MCTS"
+  },
+
+  "MCTS": {
+    "timeout": 3,
+    "n": 100000
+  },
+
+  "IterativeDeepening": {
+    "timeout": 3,
+    "depth": 5
+  },
+
+  "NegamaxAlphaBeta": {
+    "timeout": 3,
+    "depth": 5
+  },
+
+  "MinMax": {
+    "timeout": 3,
+    "depth": 5
+  }
+}
