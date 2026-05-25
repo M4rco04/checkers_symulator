@@ -101,7 +101,7 @@ class BoardDrawer:
         if self.option == Option.PvP:
             is_human_turn = True
         elif self.option == Option.PvAI:
-            is_human_turn = (self.problem.current_turn == self.player_color)
+            is_human_turn = self.problem.current_turn == self.player_color
 
         if not is_human_turn:
             return
@@ -224,8 +224,8 @@ class BoardDrawer:
             )
 
             if (
-                    self.selected_pawn
-                    and pawn.get_position() == self.selected_pawn.get_position()
+                self.selected_pawn
+                and pawn.get_position() == self.selected_pawn.get_position()
             ):
                 self.ax.plot(
                     y,
@@ -265,8 +265,8 @@ class BoardDrawer:
                 f"HISTORIA (Ruch: {self.current_full_move})",
                 color="#b58863",
                 fontsize=14,
-                fontweight='bold',
-                loc='center',
+                fontweight="bold",
+                loc="center",
             )
         else:
             current_turn = self.problem.current_turn
@@ -279,11 +279,13 @@ class BoardDrawer:
                     fontsize=16,
                     fontweight="bold",
                     color="red",
-                    loc="center"
+                    loc="center",
                 )
             else:
                 tura = "Białe" if current_turn == PawnColor.White else "Czarne"
-                self.ax.set_title(f"Tura: {tura}", fontsize=16, fontweight="bold", loc="center")
+                self.ax.set_title(
+                    f"Tura: {tura}", fontsize=16, fontweight="bold", loc="center"
+                )
 
         self.fig.canvas.draw()
 
@@ -354,8 +356,8 @@ class BoardDrawer:
         )
 
         for btn, ax in zip(
-                [self.btn_start, self.btn_prev, self.btn_next, self.btn_end],
-                [ax_start, ax_prev, ax_next, ax_end],
+            [self.btn_start, self.btn_prev, self.btn_next, self.btn_end],
+            [ax_start, ax_prev, ax_next, ax_end],
         ):
             btn.label.set_fontsize(18)
             ax.spines["top"].set_edgecolor(self._btn_edge_color)
