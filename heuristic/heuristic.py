@@ -27,7 +27,9 @@ class Heuristic:
     def _evaluate_color(self, board: Board, color: PawnColor) -> float:
         score = 0.0
 
-        pawns_dict = board.white_pawns if color == PawnColor.White else board.black_pawns
+        pawns_dict = (
+            board.white_pawns if color == PawnColor.White else board.black_pawns
+        )
         pawns = pawns_dict.values()
 
         if len(pawns) == 0:
