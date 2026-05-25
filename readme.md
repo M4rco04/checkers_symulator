@@ -1,46 +1,52 @@
 # Checkers AI Engine ♟️
 
-Zaawansowany silnik do gry w warcaby, napisany w języku Python. Projekt implementuje podejście obiektowe do reprezentacji stanu gry oraz zawiera zestaw klasycznych i nowoczesnych algorytmów sztucznej inteligencji służących do wyboru najlepszego ruchu.
+An advanced checkers game engine written in Python. The project implements an object-oriented approach to game state representation and includes a suite of classic and modern artificial intelligence algorithms for selecting the best move.
 
-## 🚀 Możliwości i Algorytmy
+## 🚀 Features and Algorithms
 
-Projekt pozwala na zestawienie ze sobą różnych algorytmów AI (AI vs AI) lub grę gracza przeciwko maszynie. Zaimplementowano następujące algorytmy decyzyjne:
+The project allows for pitting different AI algorithms against each other (AI vs AI) or playing a human player against the machine. The following decision-making algorithms have been implemented:
 
-* **MinMax** – klasyczny algorytm przeszukiwania drzewa gry.
-* **Negamax z cięciami Alfa-Beta** – zoptymalizowana wersja algorytmu MinMax, znacznie redukująca przestrzeń przeszukiwania.
-* **Iterative Deepening** – algorytm typu *Anytime*, który stopniowo zwiększa głębokość przeszukiwania, co pozwala na przerwanie obliczeń w dowolnym momencie (np. po upływie limitu czasu), przy jednoczesnym zachowaniu najlepszego znalezionego ruchu.
-* **Monte Carlo Tree Search (MCTS)** – algorytm heurystyczny oparty na losowych symulacjach (rollouts) z balansem eksploracji i eksploatacji za pomocą wzoru UCB1.
+* **MinMax** – a classic game tree search algorithm.
+* **Negamax with Alpha-Beta pruning** – an optimized version of the MinMax algorithm that significantly reduces the search space.
+* **Iterative Deepening** – an *Anytime* algorithm that gradually increases the search depth, allowing calculations to be interrupted at any given moment (e.g., after a time limit expires) while retaining the best move found so far.
+* **Monte Carlo Tree Search (MCTS)** – a heuristic algorithm based on random simulations (rollouts) that balances exploration and exploitation using the UCB1 formula.
 
-## 🧠 Heurystyka i Optymalizacje
+## 🧠 Heuristics and Optimizations
 
-* **Move Ordering:** Silnik inteligentnie sortuje możliwe ruchy przed ich analizą, znacznie przyspieszając działanie cięć Alfa-Beta. Premiowane są m.in. bicia, tworzenie łańcuchów obronnych, ruchy w stronę krawędzi oraz awanse na damki.
-* **Ocena planszy:** Funkcja ewaluacyjna bierze pod uwagę nie tylko układ materiału (zwykłe pionki i damki), ale również stopień awansu pionków, bezpieczeństwo (pozycje przy krawędzi) oraz czas/liczbę ruchów, aby unikać przedłużających się gier.
-* **Obsługa remisów:** Wbudowana zasada 40 ruchów bez bicia (zapobiegająca nieskończonym pętlom w fazie gry końcowej).
+* **Move Ordering:** The engine intelligently sorts possible moves before analyzing them, significantly speeding up Alpha-Beta pruning. It prioritizes captures, the creation of defensive chains, moving towards the edges, and promotions to kings.
+* **Board evaluation:** The evaluation function takes into account not only the material balance (regular pawns and kings) but also the level of pawn advancement, safety (edge positions), and the time/number of moves to prevent prolonged games.
+* **Draw handling:** A built-in 40-move rule without captures (preventing infinite loops in the endgame phase).
 
-## 🛠️ Architektura Kodu
+## 🛠️ Code Architecture
 
-* `algorithm/` – implementacje algorytmów przeszukujących.
-* `heuristic/` – funkcje oceniające stan planszy (klasyczna oraz sigmoidalna pod MCTS).
-* `representation/` – klasy odpowiedzialne za logikę i zasady gry (`Board`, `Move`, `Pawn`, `Problem`). Obejmują m.in. logikę wielokrotnych bić oraz generowanie dozwolonych ruchów.
-* `view/` – interfejs użytkownika (rysowanie planszy).
+* `algorithm/` – implementations of the search algorithms.
+* `heuristic/` – board state evaluation functions (classic and sigmoidal for MCTS).
+* `representation/` – classes responsible for game logic and rules (`Board`, `Move`, `Pawn`, `Problem`). This includes the logic for multiple captures and the generation of legal moves.
+* `view/` – the user interface (drawing the board).
 
-## 💻 Uruchomienie
+## 💻 How to Run
 
-Aby uruchomić silnik i rozpocząć grę, uruchom plik główny:
+To run the engine and start a game, execute the main file:
 
-Gra dla dwóch graczy:
+Two-player game:
+
 ```bash
 python main.py -o PvP
+
 ```
 
-Gra z AI:
+Game against AI:
+
 ```bash
 python main.py -o PvAI
+
 ```
 
-Gra AI z AI:
+AI vs AI game:
+
 ```bash
 python main.py -o AIvAI
+
 ```
 
-Wszystkie ustawienia znajdują się w pliku **settings.json**
+All configuration settings are located in the **settings.json** file.
