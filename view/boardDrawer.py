@@ -27,11 +27,11 @@ class BoardDrawer:
 
         if option == Option.PvP:
             self.problem = kwargs["problem"]
-            self.player_color = kwargs.get("player_color", PawnColor.White)
+            self.player_color = PawnColor(kwargs.get("player_color", 1))
         elif option == Option.PvAI:
-            self.algorithm = kwargs["algorithm"]
+            self.algorithm = kwargs["algorithm1"]
             self.problem = self.algorithm.problem
-            self.player_color = kwargs.get("player_color", PawnColor.White)
+            self.player_color = PawnColor(kwargs.get("player_color", 1))
         elif option == Option.AIvAI:
             self.algorithm1 = kwargs["algorithm1"]
             self.algorithm2 = kwargs["algorithm2"]

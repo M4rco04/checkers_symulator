@@ -80,7 +80,7 @@ def main():
 
     if args.option == "PvP":
         player_color_val = config["PvP"]["player_color"]
-        player_color = PawnColor(player_color_val)  # 0 dla Black, 1 dla White
+        player_color = PawnColor(player_color_val)
         p = Problem(board, player_color)
 
     elif args.option == "PvAI":
@@ -102,7 +102,7 @@ def main():
         algorithm1 = create_algorithm(algo1_name, p, PawnColor.White, config)
         algorithm2 = create_algorithm(algo2_name, p, PawnColor.Black, config)
 
-    drawer = BoardDrawer(option_enum, algorithm1=algorithm1, algorithm2=algorithm2)
+    drawer = BoardDrawer(option_enum, algorithm1=algorithm1, algorithm2=algorithm2, problem=p, player_color=player_color)
     drawer.draw()
 
 

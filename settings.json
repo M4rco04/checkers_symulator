@@ -5,10 +5,10 @@
   },
   "PvAI": {
     "player_color": 1,
-    "algorithm": "MCTS"
+    "algorithm": "IterativeDeepening"
   },
   "AIvAI": {
-    "algorithm1": "MinMax",
+    "algorithm1": "IterativeDeepening",
     "algorithm2": "MCTS"
   },
 
@@ -18,13 +18,13 @@
   },
 
   "IterativeDeepening": {
-    "timeout": 3,
-    "depth": 5
+    "timeout": 1.5,
+    "depth": 3
   },
 
   "NegamaxAlphaBeta": {
     "timeout": 3,
-    "depth": 5
+    "depth": 4
   },
 
   "MinMax": {
