@@ -12,7 +12,7 @@ from heuristic.MCTSHeuristic import MCTSHeuristic
 class MonteCarloSearchTree(Algorithm):
     n: int
 
-    def __init__(self, problem: Problem, color: PawnColor, timeout: float, n: int):
+    def __init__(self, problem: Problem, color: PawnColor, timeout: float, n: int = 100_000):
         super().__init__(problem, color, timeout)
         self.n = n
         self.U = []

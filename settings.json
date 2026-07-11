@@ -18,8 +18,8 @@
   },
 
   "IterativeDeepening": {
-    "timeout": 1.5,
-    "depth": 3
+    "timeout": 2,
+    "depth": 5
   },
 
   "NegamaxAlphaBeta": {

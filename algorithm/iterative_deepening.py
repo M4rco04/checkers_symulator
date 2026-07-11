@@ -8,7 +8,7 @@ from representation.board import Board
 
 
 class IterativeDeepening(Algorithm):
-    def __init__(self, problem: Problem, color: PawnColor, timeout: float, depth: int):
+    def __init__(self, problem: Problem, color: PawnColor, timeout: float, depth: int = 3):
         super().__init__(problem, color, timeout)
         self.depth = depth
 

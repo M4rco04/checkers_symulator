@@ -1,6 +1,9 @@
 import copy
 from enum import Enum
 import numpy as np
+from queue import Queue, Empty
+import threading
+import time
 
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
@@ -56,6 +59,9 @@ class BoardDrawer:
 
         self.history = [copy.deepcopy(self.problem.board)]
         self.history_index = 0
+
+        self.ai_queue = Queue()
+        self.ai_thread = None
 
     @property
     def current_full_move(self) -> int:
@@ -125,7 +131,7 @@ class BoardDrawer:
 
             self._redraw()
 
-            self.handle_computer_move()
+            self.start_ai_if_needed()
             return
 
         board = self.problem.board
@@ -171,6 +177,7 @@ class BoardDrawer:
             self.selected_pawn = None
             self.valid_moves_for_selected.clear()
             self._redraw()
+            self.start_ai_if_needed()
 
     def go_to_end(self, event):
         if self.history_index < len(self.history) - 1:
@@ -178,6 +185,7 @@ class BoardDrawer:
             self.selected_pawn = None
             self.valid_moves_for_selected.clear()
             self._redraw()
+            self.start_ai_if_needed()
 
     def _redraw(self):
         """
@@ -224,8 +232,8 @@ class BoardDrawer:
             )
 
             if (
-                self.selected_pawn
-                and pawn.get_position() == self.selected_pawn.get_position()
+                    self.selected_pawn
+                    and pawn.get_position() == self.selected_pawn.get_position()
             ):
                 self.ax.plot(
                     y,
@@ -297,41 +305,66 @@ class BoardDrawer:
 
         self.fig.canvas.draw()
 
-    def handle_computer_move(self):
-        """
-        Pauzuje na chwilę grę, pobiera ruch od komputera i wykonuje go na planszy.
-        Obsługuje zarówno pojedynczy ruch dla trybu PvAI, jak i cykliczne ruchy dla AIvAI.
-        """
-        while True:
-            current_turn = self.problem.current_turn
+    def compute_ai_move(self, full_move):
+        time.sleep(0.5)
+        current_turn = self.problem.current_turn
 
-            if len(self.problem.possible_moves(current_turn)) == 0:
-                break
-
-            active_algo = None
-            if self.option == Option.PvAI and current_turn != self.player_color:
-                active_algo = self.algorithm
-            elif self.option == Option.AIvAI:
-                if self.algorithm1.color == current_turn:
-                    active_algo = self.algorithm1
-                else:
-                    active_algo = self.algorithm2
-
-            if active_algo is None:
-                break
-
-            plt.pause(0.5)
-            computer_move = active_algo.make_move(self.current_full_move)
-
-            if computer_move is not None:
-                self.problem.execute_move(computer_move)
-                self.history.append(copy.deepcopy(self.problem.board))
-                self.history_index += 1
-                self.selected_pawn = None
-                self.valid_moves_for_selected.clear()
-                self._redraw()
+        active_algo = None
+        if self.option == Option.PvAI and current_turn != self.player_color:
+            active_algo = self.algorithm
+        elif self.option == Option.AIvAI:
+            if self.algorithm1.color == current_turn:
+                active_algo = self.algorithm1
             else:
-                break
+                active_algo = self.algorithm2
+
+        if active_algo is not None:
+            computer_move = active_algo.make_move(full_move)
+            self.ai_queue.put(computer_move)
+        else:
+            self.ai_queue.put(None)
+
+    def start_ai_if_needed(self):
+        if self.ai_thread is not None and self.ai_thread.is_alive():
+            return
+
+        if self.option == Option.PvP:
+            return
+
+        if self.history_index < len(self.history) - 1:
+            return
+
+        current_turn = self.problem.current_turn
+
+        if len(self.problem.possible_moves(current_turn)) == 0:
+            return
+
+        if self.option == Option.PvAI and current_turn == self.player_color:
+            return
+
+        live_move = ((len(self.history) - 1) // 2) + 1
+        self.ai_thread = threading.Thread(target=self.compute_ai_move, args=(live_move,), daemon=True)
+        self.ai_thread.start()
+
+    def check_ai_result(self):
+        try:
+            move = self.ai_queue.get_nowait()
+            if move is not None:
+                is_at_the_end = (self.history_index == len(self.history) - 1)
+
+                self.problem.execute_move(move)
+                self.history.append(copy.deepcopy(self.problem.board))
+
+                if is_at_the_end:
+                    self.history_index = len(self.history) - 1
+                    self.selected_pawn = None
+                    self.valid_moves_for_selected.clear()
+                    self._redraw()
+
+            self.ai_thread = None
+            self.start_ai_if_needed()
+        except Empty:
+            pass
 
     def draw(self):
         """
@@ -364,8 +397,8 @@ class BoardDrawer:
         )
 
         for btn, ax in zip(
-            [self.btn_start, self.btn_prev, self.btn_next, self.btn_end],
-            [ax_start, ax_prev, ax_next, ax_end],
+                [self.btn_start, self.btn_prev, self.btn_next, self.btn_end],
+                [ax_start, ax_prev, ax_next, ax_end],
         ):
             btn.label.set_fontsize(18)
             ax.spines["top"].set_edgecolor(self._btn_edge_color)
@@ -380,6 +413,10 @@ class BoardDrawer:
 
         self._redraw()
 
-        self.handle_computer_move()
+        self.timer = self.fig.canvas.new_timer(interval=100)
+        self.timer.add_callback(self.check_ai_result)
+        self.timer.start()
+
+        self.start_ai_if_needed()
 
         plt.show()

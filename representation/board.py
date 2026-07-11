@@ -17,6 +17,7 @@ class Board:
         self.white_pawns = dict()
         self.black_pawns = dict()
         self.board = np.full((8, 8), None, dtype=object)
+        self.pawn_rows = pawn_rows
 
         for i in range(pawn_rows):
             for j in range(0, 8, 2):
