@@ -1,4 +1,0 @@
-algorithm
-heuristic
-representation
-view
